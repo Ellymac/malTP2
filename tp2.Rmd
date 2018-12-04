@@ -107,10 +107,11 @@ contour(seqx1,seqx2,matrix(p3,K),col="black",lty=1,add=TRUE, drawlabels = FALSE)
 ```{r}
 library(randomForest)
 library(MASS)
-library(tidyverse)
-library(tidymodels)
+library(tidyr)
 library(ipred)
 library(ElemStatLearn)
+library(purrr)
+library(tibble)
 data(spam)
 
 
@@ -121,16 +122,16 @@ performance <- map_dfr(folds$splits,
          x.test <- as_tibble(x, data = "assessment")
          
          y_pred <- predict(tree(spam~., data = x.train), newdata = x.test, type = "class")
-         Tree <- mean(ypred == x.test$spam)
+         Tree <- mean(y_pred == x.test$spam)
          
          y_pred <- predict(bagging(spam~., data = x.train), newdata = x.test, type = "class")
-         Bagging <- mean(ypred == x.test$spam)
+         Bagging <- mean(y_pred == x.test$spam)
          
-         ypred <- predict(randomForest(spam~., data = x.train), newdata = x.test, type = "class")
-         RandomForest <- mean(ypred == x.test$spam)
+         y_pred <- predict(randomForest(spam~., data = x.train), newdata = x.test, type = "class")
+         RandomForest <- mean(y_pred == x.test$spam)
          
-         ypred <- predict(lda(spam~., data = x.train), newdata = x.test)$class
-         LDA <- mean(ypred == x.test$spam)
+         y_pred <- predict(lda(spam~., data = x.train), newdata = x.test)$class
+         LDA <- mean(y_pred == x.test$spam)
          
          tibble(Tree=Tree, Bagging=Bagging, RandomForest=RandomForest, LDA=LDA)
          
