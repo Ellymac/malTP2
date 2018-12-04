@@ -105,23 +105,40 @@ contour(seqx1,seqx2,matrix(p3,K),col="black",lty=1,add=TRUE, drawlabels = FALSE)
 ## C
 
 ```{r}
-folds <-vfold_cv(spam,v = 5);
-performance = map.dfr(folds$splits,
-                      function(x) {
-                        x.train <- 
-                      })
+library(randomForest)
+library(MASS)
+library(tidyverse)
+library(tidymodels)
+library(ipred)
+library(ElemStatLearn)
+data(spam)
 
-Bagging <- mean(ypred == x.test$spam)
-ypred <- predict(randomForest(spam~., data=x.train),newdata=x.test,type="class");
-RandomForest <- mean(ypred == x.test$spam)
-ypred <- predict(lda(spam~.,data=y.train),newdata=x.test)$class
-LDA <- mean(ypred == x.test$spam)
-tibble(Tree=Tree,Bagging=Bagging,RandomForest=RandomForest,LDA=LDA)
-))
+
+folds <- vfold_cv(spam, v=5)
+performance <- map_dfr(folds$splits,
+       function(x){
+         x.train <- as_tibble(x, data = "analysis")
+         x.test <- as_tibble(x, data = "assessment")
+         
+         y_pred <- predict(tree(spam~., data = x.train), newdata = x.test, type = "class")
+         Tree <- mean(ypred == x.test$spam)
+         
+         y_pred <- predict(bagging(spam~., data = x.train), newdata = x.test, type = "class")
+         Bagging <- mean(ypred == x.test$spam)
+         
+         ypred <- predict(randomForest(spam~., data = x.train), newdata = x.test, type = "class")
+         RandomForest <- mean(ypred == x.test$spam)
+         
+         ypred <- predict(lda(spam~., data = x.train), newdata = x.test)$class
+         LDA <- mean(ypred == x.test$spam)
+         
+         tibble(Tree=Tree, Bagging=Bagging, RandomForest=RandomForest, LDA=LDA)
+         
+       }
+      )
 
 performance <- gather(performance, key="Algorithm", value="Error")
-ggplot(data~performance,aes(x=Algorithm, y=Error,col=Algorithm))
-geom_boxplot()
+ggplot(data = performance,aes(x=Algorithm, y=Error,col=Algorithm)) + geom_boxplot()
 ```
 
 
