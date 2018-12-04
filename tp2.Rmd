@@ -1,0 +1,144 @@
+---
+title: "tp2"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+```{r}
+rm(list=ls());
+graphics.off();
+n=200;
+x1=mvtnorm::rmvnorm(n, mean = c(1,0),sigma=matrix(c(1,0,0,1),nrow=2,2));
+x2=mvtnorm::rmvnorm(n, mean = c(3,3),sigma=matrix(c(0.5,0,0,0.5),nrow=2,2));
+Y = as.factor(rep(c(1,2),each=200));
+X = rbind(x1,x2);
+Z = as.data.frame(cbind(X,Y));
+names(Z) = c("X1","X2","Y");
+plot(Z[,1:2],col=c("blue","red")[Z$Y]);
+```
+
+## A. Simulated data
+# a)
+```{r}
+library(tree);
+Z$Y = as.factor(Z$Y);
+modtree = tree(Y~.,data=Z);
+plot(modtree);
+text(modtree,cex=0.8);
+
+
+
+```
+
+# b)
+```{r}
+K=40;
+seqx1=seq(min(Z$X1),max(Z$X1), length=K);
+seqx2=seq(min(Z$X2),max(Z$X2), length=K);
+mygrid=expand.grid(z1=seqx1,z2=seqx2);
+names(mygrid)=names(Z)[c(1,2)];
+plot(mygrid);
+```
+```{r}
+p = predict(modtree, mygrid, type="class");
+plot(p);
+```
+
+```{r}
+#frontiere decision
+red2=rgb(red=254/255,green=231/255,blue=240/255,alpha=0.2); # red color with transparency
+blue2=rgb(red=51/255,green=161/255,blue=201/255,alpha=0.2); # blue color with transparency
+image(seqx1,seqx2,matrix(as.numeric(p),K),col=c(blue2,red2),xlab="",ylab="",xaxt="n",yaxt="n")
+points(Z[,1],Z[,2], col=c("blue","red")[Z$Y],pch=16,lwd=2,cex=0.8)
+contour(seqx1,seqx2,matrix(p,K),col="black",lty=1,add=TRUE, drawlabels = FALSE)
+```
+
+## Bagging with trees
+
+```{r}
+library(ipred);
+modbag = bagging(Y~., data = Z, coob = TRUE);
+summary = summary(modbag);
+```
+- 25 baggs
+- Out-of-bag (OOB) error, also called out-of-bag estimate, is a method of measuring the prediction error of random forests, boosted decision trees, and other machine learning models utilizing bootstrap aggregating (bagging) to sub-sample data samples used for training.
+
+```{r}
+predBag = predict(modbag, mygrid, type = "class");
+plot(predBag);
+```
+```{r}
+#frontiere decision
+red2=rgb(red=254/255,green=231/255,blue=240/255,alpha=0.2); # red color with transparency
+blue2=rgb(red=51/255,green=161/255,blue=201/255,alpha=0.2); # blue color with transparency
+image(seqx1,seqx2,matrix(as.numeric(predBag),K),col=c(blue2,red2),xlab="",ylab="",xaxt="n",yaxt="n")
+points(Z[,1],Z[,2], col=c("blue","red")[Z$Y],pch=16,lwd=2,cex=0.8);
+contour(seqx1,seqx2,matrix(predBag,K),col="black",lty=1,add=TRUE, drawlabels = FALSE)
+```
+
+## Random Forest 
+```{r}
+require(randomForest);
+rf = randomForest(Y~., data = Z);
+plot(rf);
+
+p3 = predict(rf, mygrid, type="class");
+plot(p3);
+```
+- by default = 500 trees generated
+
+```{r}
+#frontiere decision
+red2=rgb(red=254/255,green=231/255,blue=240/255,alpha=0.2); # red color with transparency
+blue2=rgb(red=51/255,green=161/255,blue=201/255,alpha=0.2); # blue color with transparency
+image(seqx1,seqx2,matrix(as.numeric(p3),K),col=c(blue2,red2),xlab="",ylab="",xaxt="n",yaxt="n")
+points(Z[,1],Z[,2], col=c("blue","red")[Z$Y],pch=16,lwd=2,cex=0.8);
+contour(seqx1,seqx2,matrix(p3,K),col="black",lty=1,add=TRUE, drawlabels = FALSE)
+```
+
+
+## C
+
+```{r}
+folds <-vfold_cv(spam,v = 5);
+performance = map.dfr(folds$splits,
+                      function(x) {
+                        x.train <- 
+                      })
+
+Bagging <- mean(ypred == x.test$spam)
+ypred <- predict(randomForest(spam~., data=x.train),newdata=x.test,type="class");
+RandomForest <- mean(ypred == x.test$spam)
+ypred <- predict(lda(spam~.,data=y.train),newdata=x.test)$class
+LDA <- mean(ypred == x.test$spam)
+tibble(Tree=Tree,Bagging=Bagging,RandomForest=RandomForest,LDA=LDA)
+))
+
+performance <- gather(performance, key="Algorithm", value="Error")
+ggplot(data~performance,aes(x=Algorithm, y=Error,col=Algorithm))
+geom_boxplot()
+```
+
+
+
+## Non parametric regression models
+# Ia)
+
+```{r}
+tab = read.table(file = "ozone.txt", header = TRUE, sep='\t', dec = '.')
+
+
+
+mytree=tree(ozone~temperature,data=tab)
+```
+
+## Plots
+
+```
+```
+
