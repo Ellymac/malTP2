@@ -44,6 +44,7 @@ mygrid=expand.grid(z1=seqx1,z2=seqx2);
 names(mygrid)=names(Z)[c(1,2)];
 plot(mygrid);
 ```
+
 ```{r}
 p = predict(modtree, mygrid, type="class");
 plot(p);
@@ -72,6 +73,7 @@ summary = summary(modbag);
 predBag = predict(modbag, mygrid, type = "class");
 plot(predBag);
 ```
+
 ```{r}
 #frontiere decision
 red2=rgb(red=254/255,green=231/255,blue=240/255,alpha=0.2); # red color with transparency
@@ -108,10 +110,15 @@ contour(seqx1,seqx2,matrix(p3,K),col="black",lty=1,add=TRUE, drawlabels = FALSE)
 library(randomForest)
 library(MASS)
 library(tidyr)
+library(rsample) # install.packages("rsample")
+library(rpart)
+library(tree)
+library(e1071)
 library(ipred)
 library(ElemStatLearn)
 library(purrr)
 library(tibble)
+library(ggplot2)
 data(spam)
 
 
@@ -124,16 +131,31 @@ performance <- map_dfr(folds$splits,
          y_pred <- predict(tree(spam~., data = x.train), newdata = x.test, type = "class")
          Tree <- mean(y_pred == x.test$spam)
          
+         
+         y_pred <- predict(rpart(spam~., data = x.train, method="class"), newdata = x.test, type = "class")
+         CART_class <- mean(y_pred == x.test$spam)
+         
          y_pred <- predict(bagging(spam~., data = x.train), newdata = x.test, type = "class")
          Bagging <- mean(y_pred == x.test$spam)
          
          y_pred <- predict(randomForest(spam~., data = x.train), newdata = x.test, type = "class")
          RandomForest <- mean(y_pred == x.test$spam)
          
-         y_pred <- predict(lda(spam~., data = x.train), newdata = x.test)$class
+         y_pred <- predict(lda(spam~., data = x.train), newdata = x.test, type = "class")$class
          LDA <- mean(y_pred == x.test$spam)
          
-         tibble(Tree=Tree, Bagging=Bagging, RandomForest=RandomForest, LDA=LDA)
+         # Error in qda.default(x, grouping, ...) : rank deficiency in group spam
+         # y_pred <- predict(qda(spam~., data = x.train), newdata = x.test, type = "class")$class
+         # QDA <- mean(y_pred == x.test$spam)
+         
+         # vaut 0 --> problème qqpart 
+         y_pred <- predict(glm(spam~., family = binomial(link = 'logit'), data = x.train), newdata = x.test)
+         LogReg <- mean(y_pred == x.test$spam)
+         
+         y_pred <- predict(naiveBayes(spam~., data = x.train), newdata = x.test)
+         Bayes <- mean(y_pred == x.test$spam)
+         
+         tibble(Tree=Tree, Bagging=Bagging, RandomForest=RandomForest, LDA=LDA, LogReg=LogReg, Bayes=Bayes, CART_class=CART_class)
          
        }
       )
@@ -148,15 +170,20 @@ ggplot(data = performance,aes(x=Algorithm, y=Error,col=Algorithm)) + geom_boxplo
 # Ia)
 
 ```{r}
-tab = read.table(file = "ozone.txt", header = TRUE, sep='\t', dec = '.')
+library(tree)
+tab = read.table(file = "ozone.txt", header = TRUE)
+#106 observations of 4 variables : ozone, radiation, temperature, wind
 
+plot(tab)
+```
 
-
+```{r}
 mytree=tree(ozone~temperature,data=tab)
+plot(mytree);text(mytree,cex=0.7)
 ```
 
-## Plots
+```{r}
+predOzone = predict(mytree, mygrid)
 
-```
 ```
 
