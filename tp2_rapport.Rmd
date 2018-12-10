@@ -99,6 +99,11 @@ performance <- map_dfr(folds$splits,
 ```
 
 #Résultats
+
+Les données de préférences, qui sont sous forme d'un tableau avec en colonne l'algorithme et en ligne la performance, sont réordonnées en deux colonnes : l'algorithme et le taux d'erreur.
+
+Elles sont ensuite affichées sous forme de boxplots.
+
 ```{r}
 #Affichage des résultats sous forme de boxplots
 performance <- gather(performance, key="Algorithm", value="Error")
