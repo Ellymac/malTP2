@@ -14,7 +14,7 @@ Les données de spam sont divisées en cinq parties grâce à `vfold_cv`.
 
 Pour chacune de ces parties `x.train`, on prend le reste des données `x.test`.
 
-Les données d'entrainnement sont utilisées pour construire les modèles de prédiction :
+Les données d'entraînement sont utilisées pour construire les modèles de prédiction :
 
 - `tree(spam~., data = x.train)`
 - `bagging(spam~., data = x.train)`
@@ -26,7 +26,7 @@ Ces modèles sont ensuite utilisés pour prédire les spams des données de test
 `y_pred <- predict(model, newdata = x.test, type = "class")`
 
 `y_pred` contient alors les prédictions du modèle `model` selon les 57 premières colonnes de `x.test`.
-On calcule avec la moyenne des bonnes prédictions avec `mean(y_pred == x.test$spam)`.
+On calcule la moyenne des bonnes prédictions avec `mean(y_pred == x.test$spam)`.
 
 ```{r}
 #chargement des librairies
