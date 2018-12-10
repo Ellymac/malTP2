@@ -1,0 +1,85 @@
+---
+title: "Rapport TP2 - Partie C"
+author: "Hubert Hirtz, Camille Schnell"
+date: "10 décembre 2018"
+output: pdf_document
+---
+
+#Objectif
+Il s'agit ici, à partir du dataset *spam* (librairie **ElemStatLearn**), de comparer les performances de différentes machines, basées sur les modèles étudiés en cours.
+
+#Mise en œuvre
+Pour effectuer la comparaison, nous utilisons une fonction de map.
+Pour chaque modèle, nous ....**expliquer train, test, et ce qu'on fait avec predict, mean**....
+
+```{r}
+#chargement des librairies
+library(randomForest)
+library(MASS)
+library(tidyr)
+library(rsample)
+library(rpart)
+library(tree)
+library(e1071)
+library(ipred)
+library(ElemStatLearn)
+library(purrr)
+library(tibble)
+library(ggplot2)
+
+#réinitialisation des données dans rstudio
+rm(list=ls());
+graphics.off();
+
+#récupération des données de spam
+data(spam)
+
+#analyse des performances
+folds <- vfold_cv(spam, v=5)
+performance <- map_dfr(folds$splits,
+       function(x){
+         x.train <- as_tibble(x, data = "analysis")
+         x.test <- as_tibble(x, data = "assessment")
+         
+         #CART
+         y_pred <- predict(tree(spam~., data = x.train), newdata = x.test, type = "class")
+         Tree <- mean(y_pred == x.test$spam)
+         
+         #Bagging
+         y_pred <- predict(bagging(spam~., data = x.train), newdata = x.test, type = "class")
+         Bagging <- mean(y_pred == x.test$spam)
+         
+         #Random forest
+         y_pred <- predict(randomForest(spam~., data = x.train), newdata = x.test, type = "class")
+         RandomForest <- mean(y_pred == x.test$spam)
+         
+         #LDA
+         y_pred <- predict(lda(spam~., data = x.train), newdata = x.test, type = "class")$class
+         LDA <- mean(y_pred == x.test$spam)
+         
+         #QDA
+         # Error in qda.default(x, grouping, ...) : rank deficiency in group spam
+         #y_pred <- predict(qda(spam~., data = x.train), newdata = x.test)
+         #QDA <- mean(y_pred == x.test$spam)
+         
+         #Logistic regression
+         y_pred <- predict(glm(spam~., family = binomial(), data = x.train), newdata = x.test, type="response")
+         LogReg <- mean(y_pred == x.test$spam)
+         
+         #Bayes
+         y_pred <- predict(naiveBayes(spam~., data = x.train), newdata = x.test)
+         Bayes <- mean(y_pred == x.test$spam)
+         
+         tibble(Bayes=Bayes, CART=Tree, LDA=LDA, LogReg=LogReg, Bagging=Bagging, RandomForest=RandomForest)
+         
+       }
+      )
+
+#Affichage des résultats sous forme de boxplots
+performance <- gather(performance, key="Algorithm", value="Error")
+ggplot(data = performance,aes(x=Algorithm, y=Error,col=Algorithm)) + geom_boxplot()
+```
+
+
+#Conclusion
+Nous remarquons, en comparant les résultats des 7 différentes machines, que l'algorithme Random forest est le plus performant.

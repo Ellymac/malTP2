@@ -131,10 +131,6 @@ performance <- map_dfr(folds$splits,
          y_pred <- predict(tree(spam~., data = x.train), newdata = x.test, type = "class")
          Tree <- mean(y_pred == x.test$spam)
          
-         
-         y_pred <- predict(rpart(spam~., data = x.train, method="class"), newdata = x.test, type = "class")
-         CART_class <- mean(y_pred == x.test$spam)
-         
          y_pred <- predict(bagging(spam~., data = x.train), newdata = x.test, type = "class")
          Bagging <- mean(y_pred == x.test$spam)
          
@@ -155,7 +151,7 @@ performance <- map_dfr(folds$splits,
          y_pred <- predict(naiveBayes(spam~., data = x.train), newdata = x.test)
          Bayes <- mean(y_pred == x.test$spam)
          
-         tibble(Tree=Tree, Bagging=Bagging, RandomForest=RandomForest, LDA=LDA, LogReg=LogReg, Bayes=Bayes, CART_class=CART_class)
+         tibble(CART=Tree, Bagging=Bagging, RandomForest=RandomForest, LDA=LDA, LogReg=LogReg, Bayes=Bayes)
          
        }
       )
