@@ -33,7 +33,7 @@ print(dataset.groupby('Caesarian').size())
 array = dataset.values
 X = array[:,0:5]
 Y = array[:,5]
-validation_size = 0.20
+validation_size = 0.30
 seed = 7
 X_train, X_validation, Y_train, Y_validation = model_selection.train_test_split(X, Y, test_size=validation_size, random_state=seed)
 
