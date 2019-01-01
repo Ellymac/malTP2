@@ -1,0 +1,15 @@
+J'ai fait 2 algos : KNN et CART.
+
+Dans le fichier KNN, j'ai aussi au début une comparaison des différentes méthodes avec boxplot.
+Dans CART il y a une méthode print_tree, ce serait bien d'afficher les arbres de décision, mais pour l'instant ça marche pas.
+
+*****Résultats*****
+KNN : accuracy = 0.75
+CART : accuracy = 62.5 (avec Gini ou Entropy, je pense que comme notre dataset est petit, ça change rien d'utiliser l'index gini ou l'entropy)
+*******************
+
+Il faudrait encore faire le naive bayes et 1 ou 2 autres méthodes et ensuite à la fin comparer l'accuracy de chacune (et aussi le taux d'erreur ou une autre valeur du même genre ce serait bien)
+
+
+ps1 : Ah je sais pas si c'est exactement ça qu'il faut faire d'ailleurs pour le projet :)
+ps2 : J'ai fait en python

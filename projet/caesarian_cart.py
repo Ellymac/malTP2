@@ -6,6 +6,10 @@ from sklearn import model_selection
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import classification_report
+from sklearn.externals.six import StringIO
+from IPython.display import Image
+from sklearn.tree import export_graphviz
+import pydotplus
 from scipy.io import arff
 
 # Function importing Dataset
@@ -38,19 +42,19 @@ def train_using_gini(X_train, X_test, y_train):
 
     # Creating the classifier object
     clf_gini = DecisionTreeClassifier(criterion = "gini",
-            random_state = 100,max_depth=6, min_samples_leaf=5)
+            random_state = 100,max_depth=5, min_samples_leaf=5)
 
     # Performing training
     clf_gini.fit(X_train, y_train)
     return clf_gini
 
 # Function to perform training with entropy.
-def tarin_using_entropy(X_train, X_test, y_train):
+def train_using_entropy(X_train, X_test, y_train):
 
     # Decision tree with entropy
     clf_entropy = DecisionTreeClassifier(
             criterion = "entropy", random_state = 100,
-            max_depth = 6, min_samples_leaf = 5)
+            max_depth = 5, min_samples_leaf = 5)
 
     # Performing training
     clf_entropy.fit(X_train, y_train)
@@ -78,6 +82,12 @@ def cal_accuracy(y_test, y_pred):
     print("Report : ",
     classification_report(y_test, y_pred))
 
+def print_tree(tree):
+
+    dt_graphviz = export_graphviz(tree, out_file = None)
+    pydot_graph = pydotplus.graph_from_dot_data(dt_graphviz)
+    Image(pydot_graph.create_png())
+
 # Driver code
 def main():
 
@@ -85,7 +95,7 @@ def main():
     data = importdata()
     X, Y, X_train, X_test, y_train, y_test = splitdataset(data)
     clf_gini = train_using_gini(X_train, X_test, y_train)
-    clf_entropy = tarin_using_entropy(X_train, X_test, y_train)
+    clf_entropy = train_using_entropy(X_train, X_test, y_train)
 
     # Operational Phase
     print("Results Using Gini Index:")
@@ -93,11 +103,13 @@ def main():
     # Prediction using gini
     y_pred_gini = prediction(X_test, clf_gini)
     cal_accuracy(y_test, y_pred_gini)
+    print_tree(clf_gini)
 
     print("Results Using Entropy:")
     # Prediction using entropy
     y_pred_entropy = prediction(X_test, clf_entropy)
     cal_accuracy(y_test, y_pred_entropy)
+    print_tree(clf_entropy)
 
 
 # Calling main function
