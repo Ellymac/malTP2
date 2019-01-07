@@ -12,16 +12,16 @@ Nous avons dans un premier temps analysé le contenu du dataset, puis nous avons
 
 Nous avons ensuite commencé à tester différents modèles, avec pour objectif de déterminer le meilleur modèle, c'est-à-dire celui nous donnant les prédictions les plus précises possibles.
 
-Le nombre d'observations présentes dans le dataset de départ est relativement petit (80 observations). On le divise en plus par 5 pour le k-fold (64 observations d'entrainnement et 16 observations de test). Enfin, 5 variables sont à prendre en compte, ce qui augmente encore le taux d'erreur pour les différents modèles.
+Le nombre d'observations présentes dans le dataset de départ est relativement petit (80 observations). On le divise en plus par 5 pour le k-fold (64 observations d'entrainnement et 16 observations de test). Enfin, 5 variables sont à prendre en compte, ce qui augmente encore le taux d'erreur des différents modèles.
 
 ## Arbre de décision (CART)
-![BoxplotFinal](./cartTree.png)
+![CART Tree](./cartTree.png)
 
 ## Random Forest
-![BoxplotFinal](./varImp.png)
+![Random Forest Results](./varImp.png)
 
 ## Comparaison des performances
-![BoxplotFinal](./boxplot.png)
+![Boxplot Final](./boxplot.png)
 
 ## Conclusion
 Après avoir comparé les performances des différents modèles de machine learning, pour le dataset *Caesarian section*, le modèle le plus performant est le KNN (K-nearest neighbors), avec 80% de précision. Il est suivi par Naive Bayes, avec un taux de précision d'environ 70%.
