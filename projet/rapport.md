@@ -12,10 +12,14 @@ Nous avons dans un premier temps analysé le contenu du dataset, puis nous avons
 
 Nous avons ensuite commencé à tester différents modèles, avec pour objectif de déterminer le meilleur modèle, c'est-à-dire celui nous donnant les prédictions les plus précises possibles.
 
-Le nombre d'observations présentes dans le dataset de départ est relativement petit (80 observations). On le divise en plus par 5 pour le k-fold (64 observations d'entrainnement et 16 observations de test). Enfin, 5 variables sont à prendre en compte, ce qui augmente encore le taux d'erreur des différents modèles.
+Le nombre d'observations présentes dans le dataset de départ est relativement petit (80 observations). On le divise en plus par 5 pour le k-fold (64 observations d'entraînement et 16 observations de test). Enfin, 5 variables sont à prendre en compte, ce qui augmente encore le taux d'erreur des différents modèles.
 
 ## Arbre de décision (CART)
+Nous avons construit un arbre de décision en suivant le modèle CART grâce au package *rpart* en R. À partir des données, on obtient alors, par exemple, l'arbre suivant :
+
 ![CART Tree](./cartTree.png)
+
+On observe alors, pour l'exemple ci-dessus (l'arbre peut varier selon les données contenues dans *data_train*, celles-ci étant peu nombreuses), que si la pression sanguine est normale, l'âge (supérieur ou non à 31) détermine la décision finale. Dans le cas contraire, s'il y a un problème cardiaque, une césarienne est nécessaire, sinon c'est à nouveau l'âge qui entre en compte pour prédire la valeur de la variable *Caesarian*.
 
 ## Random Forest
 ![Random Forest Results](./varImp.png)

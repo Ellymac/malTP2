@@ -35,7 +35,7 @@ caesarianTree <- rpart(Caesarian~., data = data_train,control=rpart.control(mins
 # optimize tree
 #plotcp(caesarianTree)
 #caesarianTreeOpti <- prune(caesarianTree,cp=caesarianTree$cptable[which.min(caesarianTree$cptable[,4]),1])
-prp(caesarianTree, extra = 1)
+prp(caesarianTree)
 
 predTree <- predict(caesarianTree, newdata = data_test, type = "class")
 # confusion matrix and performance
