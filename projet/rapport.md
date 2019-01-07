@@ -1,5 +1,7 @@
 *Hubert Hirtz - Camille Schnell*
+
 # Rapport de projet
+
 #### *Caesarian section (Classification dataset)*
 
 ## Objectif
@@ -25,7 +27,8 @@ On observe alors, pour l'exemple ci-dessus (l'arbre peut varier selon les donné
 ![Random Forest Results](./varImp.png)
 
 ## Comparaison des performances
-![Boxplot Final](./boxplot.png)
+
+![Boxplot Final](./boxplot.png){ width=70% }
 
 ## Conclusion
 Après avoir comparé les performances des différents modèles de machine learning, pour le dataset *Caesarian section*, le modèle le plus performant est le KNN (K-nearest neighbors), avec 80% de précision. Il est suivi par Naive Bayes, avec un taux de précision d'environ 70%.
