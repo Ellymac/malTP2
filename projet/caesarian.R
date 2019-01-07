@@ -48,7 +48,8 @@ rf = randomForest(Caesarian~., data = data_train)
 rfpred_test <- predict(rf, newdata = data_test, type = "class")
 Rf_test <- mean(rfpred_test == data_test$Caesarian)
 
-# check confusion matrix
+# check confusion matrix and OOB
+table(data_test$Caesarian, rfpred_test)
 print(rf)
 # most important variables --> age, and then blood pressure
 varImpPlot(rf)
@@ -82,8 +83,8 @@ performance = map_dfr(folds$splits, function (x) {
   bagging = perf_of(bagging(x.train$Caesarian~., data = x.train));
   knn01 = perf_of_knn(1);
   knn05 = perf_of_knn(5);
-  knn20 = perf_of_knn(20);
-  knn = max(max(knn01, knn05), knn20);
+  knn10 = perf_of_knn(10);
+  knn = max(max(knn01, knn05), knn10);
   
   tibble( bayes = bayes
           , tree = tree_
@@ -93,5 +94,5 @@ performance = map_dfr(folds$splits, function (x) {
           , knn = knn)
 });
 
-performance = gather(performance, key="Algorithm", value="Error");
-ggplot(data = performance,aes(x=Algorithm, y=Error,col=Algorithm)) + geom_boxplot();
+performance = gather(performance, key="Algorithm", value="Precision");
+ggplot(data = performance,aes(x=Algorithm, y=Precision,col=Algorithm)) + geom_boxplot();

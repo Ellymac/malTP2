@@ -24,11 +24,24 @@ Nous avons construit un arbre de décision en suivant le modèle CART grâce au 
 On observe alors, pour l'exemple ci-dessus (l'arbre peut varier selon les données contenues dans *data_train*, celles-ci étant peu nombreuses), que si la pression sanguine est normale, l'âge (supérieur ou non à 31) détermine la décision finale. Dans le cas contraire, s'il y a un problème cardiaque, une césarienne est nécessaire, sinon c'est à nouveau l'âge qui entre en compte pour prédire la valeur de la variable *Caesarian*.
 
 ## Random Forest
+Nous avons ensuite testé la performance du modèle Random Forest sur nos données. La matrice de confusion obtenue, sur les données de test, est la suivante :
+
+![Confusion matrix](./rf_confusion.png)
+
+Nous avons ensuite utilisé la fonction *varImpPlot()* afin de savoir quelles étaient les variables déterminantes pour la décision finale. Nous obtenons le graphe suivant :
+
 ![Random Forest Results](./varImp.png)
 
+Nous remarquons ainsi que la variable la plus importante, pour prédire si une césarienne est nécessaire ou non, est l'âge de la femme ; la seconde variable d'importance est la pression sanguine au moment de l'accouchement.
+
 ## Comparaison des performances
+Finalement, afin d'avoir une idée globale des performances de différents modèles étudiés en cours, nous avons fait un k-fold sur les données d'entraînement et de test. Les modèles testés ici sont : la méthode d'ensemble Bagging, Naive Bayes, CART et Random Forest dont nous avons déjà parlé dans les premières parties, K-nearest neighbors, et Tree.
+
+Nous obtenons à la fin le boxplot suivant :
 
 ![Boxplot Final](./boxplot.png){ width=70% }
+
+De même que pour les autres résultats, à cause du faible nombre de données, le taux de précision varie de 5 à 10% en fonction des données (réparties aléatoirement) contenues dans les valeurs d'entraînement et de test.
 
 ## Conclusion
 Après avoir comparé les performances des différents modèles de machine learning, pour le dataset *Caesarian section*, le modèle le plus performant est le KNN (K-nearest neighbors), avec 80% de précision. Il est suivi par Naive Bayes, avec un taux de précision d'environ 70%.
