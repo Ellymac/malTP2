@@ -12,7 +12,7 @@ Nous avons dans un premier temps analysé le contenu du dataset, puis nous avons
 
 Nous avons ensuite commencé à tester différents modèles, avec pour objectif de déterminer le meilleur modèle, c'est-à-dire celui nous donnant les prédictions les plus précises possibles.
 
-Le nombre d'observations présentes dans le dataset de départ est relativement petit (80 observations), le nombre de données utilisées pour entraîner le modèle est donc de 60 observations (20 observations pour tester). De plus, 5 variables sont à prendre en compte, ce qui augmente encore le taux d'erreur pour les différents modèles.
+Le nombre d'observations présentes dans le dataset de départ est relativement petit (80 observations). On le divise en plus par 5 pour le k-fold (64 observations d'entrainnement et 16 observations de test). Enfin, 5 variables sont à prendre en compte, ce qui augmente encore le taux d'erreur pour les différents modèles.
 
 ## Arbre de décision (CART)
 ![BoxplotFinal](./cartTree.png)
